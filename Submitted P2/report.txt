@@ -1,0 +1,122 @@
+In this project, I created a doubly linked list. In the linked list, I have *head, *tail, and *next, previous. In order to create a linked list, i need to connect each node with the node before and after. Below are my implementation of doubly linked list, as well as some of its functions.
+
+
+
+What I have in my doubly linked list:
+Struct Node:
+	...next...
+	...previous...
+	...value...
+
+insert value in a pos
+	if pos greater or equal to linked list size() or a negative integer
+		return false
+	insert if empty
+	insert in the head pos
+	insert in the middle of list
+	insert in the tail of list
+	size++
+	return true
+
+
+insert value to list
+	if value <= n->value in the list
+		insert the value in n's position by calling insert(pos, value)
+		return pos
+	if no value in the list greater than value
+		insert value to the end of list by calling insert(pos, value)function
+	size++
+	return size-1
+
+
+erase value in pos
+	if pos is 0
+		erase from head
+
+	if 0<pos<size-1
+		erase from middle of list
+
+	if pos==size-1
+		erase the last node
+	if pos is out of range
+		return false
+
+	return true
+
+
+remove value:
+	int count = 0; 
+	if value == value in the list
+	return pos of value in list 
+		erase(pos)
+	go to the next value and compare
+
+return the number of item erased
+
+
+swap content of two sequence:
+	swap the head of two sequence
+	swap size of two sequence
+
+
+find subsequence seq2 in seq1:
+	create a tmp list used to store a new sequence.
+	if seq2 is empty
+		return false
+	create a for loop to check each element in seq1 with head of seq2
+		if an A element's value in seq1 == value of head in seq2
+			record position A
+	...
+			empty the tmp list; 
+
+			insert same amount of elements that follows A into a new linked list B
+		compare the elements in B with elements in seq2 
+			if reach to the end and B & seq2 are identical(both order and value)
+				return position of A
+			if any of the element in B is != the corresponding value in the same position in seq2
+				break from the loop
+			
+	otherwise
+	return -1
+
+
+interleave(seq1, seq2, result):
+	insert seq1 to result first
+	...
+	insert seq2 into two seq1's element
+	..
+	.....if reach the end of result, and we still have seq2 elements left
+		insert those element in the end.
+	
+	
+	
+		
+
+part of My test case:
+My test case is designed to test each of my functions in my cpp file. 
+
+Sequence s;
+    assert(s.insert(0, 1)== true && s.insert(1, 2) == true && s.insert(1, 3) == true && s.insert(0, 4)==true);
+    //4, 1, 3, 2,
+    
+    assert(s.remove(1)==1 && s.insert(0, 1) == true && s.find(1) == 0);
+    //0, 4, 3, 2,
+    
+    assert(s.insert(4, 6)==true && s.insert(6, 8) == false && s.size() == 5);
+    //0, 4, 3, 2, 6,
+    
+    assert(s.erase(0)==true);
+    //4,3,2,6
+    
+    assert(s.insert(0, 11)==true && s.insert(0, 12) == true && s.insert(0, 11)==true && s.insert(0, 11)==true && s.insert(4, 11)==true);
+    //11,11,12, 11,11,4,3,2,6,
+    
+    assert(s.remove(11)==4);
+    //12,4,3,2,6,
+    
+    assert(s.find(12)==0 && s.find(4)==1&&s.find(3)==2 && s.find(6)==4);
+    cout << "Pass all test" << endl;	
+
+......
+...
+..
