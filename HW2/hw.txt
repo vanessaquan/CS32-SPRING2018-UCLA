@@ -1,0 +1,34 @@
+problem 2 (first 12 data pop() from stack):
+(6, 5)
+(6, 6)
+(6, 4)
+(7, 4)
+(8, 4)
+(8, 3)
+(8, 2)
+(8, 1)
+(7, 1)
+(6, 3)
+(5, 5)
+(4, 5)
+
+By definition of stack, stack is LIFO. whichever points we pushed in first, we pop it last.
+inside the stack, we first pushed in all possible steps around current points and then pop the last one. continue by following the steps. if we pushed A, B, C, D, E, into stack, we will have E->D->C->B->A pop out.
+
+
+problem 4 (first 12 data pop() from queue):
+(6, 5)
+(5, 5)
+(6, 4)
+(6, 6)
+(4, 5)
+(6, 3)
+(7, 4)
+(3, 5)
+(4, 4)
+(8, 4)
+(2, 5)
+(4, 3)
+
+By the definition of Queue, queue is FIFO. whichever points we pushed in first, we poped first.
+inside the Queue, first we pop (6, 5), then check all elements available on the East, west, north and south from this point. Push all these possible points into queue. pop which ever in the front. in this case we pop (5, 5). after we poped (5, 5), we added the possible steps around (5, 5) into the queue...continue to pop and push until we reach the end point. if we have A->B->C->D->E pushed in, we should have A->B->C->D->E pop out.

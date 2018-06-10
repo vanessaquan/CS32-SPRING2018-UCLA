@@ -1,0 +1,50 @@
+2. An error of "Invalid operands to binary expression"  will occur since in the function "int Sequence<T>::insert(const T& value)", "Coord" is a class type rather than an integer type. however the operator ">" in this function can only take integer type such as int.
+
+
+4b. This problem can break down into two problems. One problem is that every time we reach to the end of a path such as "/My Pictures/Fun", we need to return the path and print it out. another problem is that when we haven't reach to the end of the vectors stored in the directory. We should check each vectors from begin() to end(). And inside of each vector, there is a possible path that we need to keep updating and return. Thus, we need at least two parameter in this function if we run it recursively. 
+
+
+
+5a. (1) for (int i = 0; i < N; i++)      -------> this takes O(N) times
+	{
+	   ...
+    (2)	    for (int j = 0; j < N; j++) --------> this takes O(N) times for each i in the outer loop
+	    {
+	       ...
+	        for (int k = 0; k < N; k++) ----> this takes O(N) times for each j in the outer loop
+    (3)	        {
+	            if (k == i  ||  k == j) ----> this takes O(1) time
+	                ...
+	            if (d < minDist)        ----> this takes O(1) time
+	            	...
+	        }
+	    }
+	}
+if we elapse the time complexity of (1) to (3), we can see that it takes O(N^3).
+
+
+
+
+
+5b.  for (int i = 0; i < N; i++)             ---> this takes N times in the worst case         
+	{ 
+	    ...
+	    for (int j = 0; j < i; j++)  // loop limit is now i, not N
+	    {
+	        for (int k = 0; k < N; k++) 
+	        {
+		           ...
+		bestMidPoint[j][i] = k;
+	        }
+	    }
+	}
+In this case, if i loops N times in the worst case, the time complexity will still remains O(N^3). In the best case, i remains 0 and the time complexity is just O(1). In this case, the middle loop is j<i, j++, which means that if i=0, the second for loop run 0 time, i = 1, the second loop j loop 1 time, if ii = 2, j loop 2 times....if i = N, j will loop N times. if we assume that i loops only N/2 times, we will have the first loop with time complexity of O(N/2), and the second loop O(N/2), and the third loop O(N). if we combine the three loops, we will have O(N/2 * N/4 * N) which is O(1/4 * (N^3)), we choose the higher order term. Thus the time complexity of this case still remains O(N^3).
+
+
+
+6a. The time complexity of this function is O(N^2). In the first loop, since we assume that seq1, seq2 and the old value of result each have N elements, the first loop of nmin = N. the loop itself will loop N times. inside of this for loop, we used get(k,v); this get() function will go through N times in the worst case. thus the first loop has time complexity of O(N^2). in the second loop, it basically insert all remaining elements of the bigger size seq into the tail of linked list. which takes O(0) in the case that there is no remaining elements. Thus, the time complexity if O(N^2).
+
+
+
+
+6b.  The overall time complexity in this case is O(N). It is much better than the previous function since it only looks at the current node in the linked list, and it insert the current node of each seq to the linked list.which takes only O(1) time. the for look itself takes O(N) time. the second for loop is still looking at the remaining nodes from the bigger sequence, which we don't have remaining sequence in this case. Thus the overall time complexity is still O(N) and it is better than the implementation on 5a.

@@ -1,0 +1,184 @@
+After tested my project in xcode and g32, There is no error occured. Below are the logic of my important functions.
+
+////////Game.cpp/////////
+In this Game class, I added and implemented 8 public functions in total. I will explain the first added function first, and finally explain the playonelevel() function i implemented finally.
+
+	In the constructor of Game, 
+Game::Game(int width, int height)
+ : m_screen(SCREEN_WIDTH, SCREEN_HEIGHT), m_level(1), m_well(width, height),
+m_rowsleft(5), m_scores(0), countL(0), well_r(height), well_c(width)
+m_level is current level
+m_well is an object of class Well
+m_rowsleft, m_scores, countL, well_r, well_c are private int members
+
+
+
+1. void     DisplayNextPiece(std::vector< std::vector<int> > p); 
+	This function use to display the next piece under (Next Piece: )
+
+2. void     pieceDisplay(int r, int c, vector< vector<int> > displayV);
+	This function use to display the piece inside the well. (r, c) is the pos on the screen
+
+3. void     rotatePiece(PieceType currPiece,int cUP);//get the first piece
+	This function is used to get the corresponding Piece shape according to the PieceType I passed in( I can get corresponding shape according to the number of times that ARROW_UP hit. The number of timer ARROW_UP hit was represented by cUP in this function, I used switch function to switch piece and it's rotation number. I assigned each result of rotation to a private double vector named 'v' )
+
+4. void     rotateSecPiece(PieceType currPiece, int cUP);
+	This function is used to get the corresponding shape for next random piece. Same as above, I can get the next piece rotated shape by switch PieceType currPiece i passed in. I assigned the result after each switch to a private double vector named 'v1'
+ 
+5. int      fallingTimer(int level);//the time for user to press any key
+	This function is called when i need to allow the player to have max(1000-(100*(L-1)), 100) milliseconds to perform commands. I return the value of max(1000-(100*(L-1)), 100).
+
+6. void     calScores(int n); //increment scores of user
+	this function if called after i counted the number of rows deleted for each time. 
+I included four if() statement to check the four cases below.
+One row is fully completed, the player gets 100 points.
+Two rows are fully completed simultaneously, the player gets 200 points.
+Three rows are fully completed simultaneously, the player gets 400 points.
+Four rows are fully completed simultaneously, the player gets 800 points.
+Five rows are fully completed simultaneously, the player gets 1600 points.
+
+7. void     checkFoam(int currR, int currC, int aa, int bb);
+	This function is used to check each position that Foam can expand. (aa,bb) is the current screen.gotoXY pos. currR and currC is the pos (2, 2) where the '#' at.
+
+8. bool    playOneLevel();
+Below is the pseducode for this function: 
+....
+	display all the current status and well first.
+	create a queue to store two pieces(first piece and next piece)
+	Queue.push(first piece)
+	create two PieceType named: firstpiece, secondpiece.
+	create an object for Timer class. 
+
+	while(true)
+	{
+		random the second piece
+		Queue.push(second piece)
+		always set firstpiece to queue.front()
+		set secondpiece to queue.back()
+		
+		rotate the firstpiece(0)  //which is the first shape
+		
+		set a bool checkMove = true;//this is used to check whether the piece can continuing move downward
+		
+		while(checkMove)
+		{
+
+			timer.start()
+			
+			while(timepassed  <  ffallingTimer(level))
+			{
+				while in between the time range, i can hit arrow keys as much as i can
+				using if( getCharIfAny(ch) ) to check if valid key is hit
+				switch(ch)
+				{
+					space:
+						go all the way down to the end, stop whenever i reached the end
+						wrote three separate if else statement to check three special piece
+						set checkMove to false
+					UP...:
+						if(the next rotation is less than index 4)
+							if(it can rotate)
+							  here I called rotatPiece(firstpiece, Rotate+1)//
+								get the shape in current index and display
+							....
+						else
+							i reset rotate to 0 index;
+							get the shape in index 0;
+					Left...:
+						if(all '#' in current piece can move one block left)
+							move to left and display
+					Right...:
+						if(all '#' in current piece can move one block right)
+							move to right and display
+					Down...:
+						if(all '#' in current piece can move one block down)
+							move down and display
+				}
+
+			}
+
+			display all updated version of well and status.
+
+		}
+			if no key is hitted, move oneblock down at a time until reach the lower boundary of well
+			else if cannot move,
+				set current piece to $ when rested in the boundary
+				or set foam piece to * in all pos it can reach
+				or set two rows upper and lower of vapor to be ' '
+					
+				set checkMove to false since it can't move futher
+
+			
+			check the levels can delete everytime checkMove is false.
+			add scores if any level deletes...
+			level left --
+			
+			display()
+
+	   }
+
+
+	Pop the front of queue.
+
+	}
+
+
+
+
+
+////Well.cpp/////
+
+
+
+1. bool isPossibleMove(int x, int y, vector< vector<int> > v);
+	check if i can move downward
+
+2. bool isPossibleMoveR(int i , int j, vector< vector<int> > v);
+	check if i can move right
+
+3. bool isPossibleMoveL(int i , int j, vector< vector<int> > v);
+	check if i can move left
+
+4. bool ifRotate(int x, int y,vector< vector<int> > v);
+	check if i can rotate, if any of '#' in the piece is out of range of well, return false
+
+5. bool dismissAlevel(int l);
+	delete lth row
+
+6. bool deleteNthLine();
+	check if any rows is filled, if there is, pass the row index to dismissAlevel and returns true,  return false
+if no row filled, this is called in the Game.cpp
+	
+7. void toDollar(int x, int y, std::vector< std::vector<int> > vv);
+	change '#' to dollar if piece is not a special piece, this is called when the piece rested at the well,this is called in the Game.cpp
+
+8. void toFoam(int r, int c, std::vector< std::vector<int> > vv);
+	change foam piece to * in its valid position,this is called in the Game.cpp
+
+9. void beVapor(int r, int c, std::vector< std::vector<int> > vv);
+	make the upper two and lower two rows dismiss,this is called in the Game.cpp
+
+
+////Piece.cpp////
+1.  
+I created double vectors return type for each different pieces, in each of the below function, I have a switch statement to
+switch different rotation of each piece, this is also called in Game.cpp
+
+   vector< vector<int> > PIECE_i(int aNumber);
+    vector< vector<int> > PIECE_l(int aNumber);
+    vector< vector<int> > PIECE_j(int aNumber);
+    vector< vector<int> > PIECE_t(int aNumber);
+    vector< vector<int> > PIECE_o(int aNumber);
+    vector< vector<int> > PIECE_s(int aNumber);
+    vector< vector<int> > PIECE_z(int aNumber);
+    vector< vector<int> > PIECE_vapor(int aNumber);
+    vector< vector<int> > PIECE_foam(int aNumber);
+    vector< vector<int> > PIECE_crazy(int aNumber);
+    vector< vector<int> > NUM_PIECE_types(int aNumber);
+
+2. void pieceDisplay(Screen& pieceS, int r, int c, vector< vector<int> > displayV);
+This function is used to display piece in the well
+    
+
+
+
