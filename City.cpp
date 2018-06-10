@@ -1,4 +1,3 @@
-# CS32-SPRING2018-UCLA
 //
 //  City.cpp
 //  CS32-P1
